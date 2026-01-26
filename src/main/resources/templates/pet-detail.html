@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pet.name} + ' - PetTinder'">Pet Detail</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            transition: opacity 0.3s;
+        }
+        
+        .back-link:hover {
+            opacity: 0.8;
+        }
+        
+        .detail-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .pet-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+        }
+        
+        .pet-content {
+            padding: 40px;
+        }
+        
+        .pet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+        
+        .pet-name {
+            font-size: 2.5em;
+            color: #333;
+        }
+        
+        .pet-type {
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .pet-meta {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .meta-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .meta-value {
+            color: #333;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .description-section {
+            margin: 30px 0;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .description-text {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+        
+        .location-section {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        
+        .location-text {
+            color: #764ba2;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .adopt-btn {
+            width: 100%;
+            padding: 18px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .adopt-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .adopted-badge {
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to all pets</a>
+        
+        <div class="detail-card" th:if="${pet != null}">
+            <img th:src="${pet.imageUrl}" th:alt="${pet.name}" class="pet-image">
+            
+            <div class="pet-content">
+                <div class="pet-header">
+                    <h1 class="pet-name" th:text="${pet.name}">Pet Name</h1>
+                    <span class="pet-type" th:text="${pet.type}">Type</span>
+                </div>
+                
+                <div class="pet-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Breed</span>
+                        <span class="meta-value" th:text="${pet.breed}">Breed</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Age</span>
+                        <span class="meta-value" th:text="${pet.age} + ' years'">Age</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Status</span>
+                        <span class="meta-value" th:text="${pet.adopted} ? 'Adopted' : 'Available'">Status</span>
+                    </div>
+                </div>
+                
+                <div class="description-section">
+                    <h2 class="section-title">About Me</h2>
+                    <p class="description-text" th:text="${pet.description}">Description</p>
+                </div>
+                
+                <div class="location-section">
+                    <span class="location-text">📍 <span th:text="${pet.location}">Location</span></span>
+                </div>
+                
+                <form th:action="@{/adopt/{id}(id=${pet.id})}" method="post" th:if="${!pet.adopted}">
+                    <button type="submit" class="adopt-btn">Adopt Me! ❤️</button>
+                </form>
+                
+                <div class="adopted-badge" th:if="${pet.adopted}">
+                    ✅ This pet has been adopted!
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
